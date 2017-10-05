@@ -1,0 +1,11 @@
+version: "3.1"
+services:
+    frontend:
+      build: .
+      image: leasewebfrontend
+      container_name: leaseweb-frontend
+      volumes:
+          - .:/usr/src/frontend
+          - /usr/src/frontend/node_modules
+      ports:
+       - "4200:4200"

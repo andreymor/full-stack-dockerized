@@ -1,0 +1,101 @@
+<?php
+
+namespace ##bundleNamespace##\Service;
+
+use Doctrine;
+use App\CoreBundle\Service\Service;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\ORMException;
+use ##bundleNamespace##\Service\Exception\##exceptionName##Exception;
+
+class ##objectName##Service extends Service
+{
+
+    /**
+     * @return \##modelNamespace##\Repository\##objectName##Repository
+     */
+    protected function getRepository() : Doctrine\Common\Persistence\ObjectRepository
+    {
+        return $this->entityManager->getRepository('##modelNamespaceCamelized##:##objectName##');
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     * @throws ##exceptionName##Exception
+     */
+    public function get##objectName##($id)
+    {
+        try {
+            return $this->getRepository()->get##objectName##($id);
+        } catch (Doctrine\DBAL\DBALException $DBALe) {
+            throw new ##objectName##Exception($DBALe->getMessage(), 500);
+        } catch (ORMException $ormE) {
+            throw new ##objectName##Exception($ormE->getMessage(), 500);
+        }
+    }
+
+    /**
+     * @param $parametros
+     * @return mixed
+     * @throws ##exceptionName##Exception
+     */
+    public function get##objectNamePluralized##($parametros, $page = 1, $limit = 10): array
+    {
+        try {
+                return $this->paginate($this->getRepository()->get##objectNamePluralized##($parametros, $page, $limit));
+
+        } catch (Doctrine\DBAL\DBALException $DBALe) {
+            throw new ##exceptionName##Exception($DBALe->getMessage(), 500);
+        } catch (ORMException $ormE) {
+            throw new ##exceptionName##Exception($ormE->getMessage(), 500);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @throws ##exceptionName##Exception
+     */
+    public function save(Request $request)
+    {
+        $this->entityManager->beginTransaction();
+
+        try {
+            $entity = $this->deserialize('##modelNamespace##\Entity\##objectName##', $request);
+            $this->entityManager->persist($entity);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+        } catch (Doctrine\DBAL\DBALException $DBALe) {
+
+            $this->entityManager->rollback();
+            throw new ##exceptionName##Exception($DBALe->getMessage(), 500);
+        } catch (ORMException $ormE) {
+
+            $this->entityManager->rollback();
+            throw new ##exceptionName##Exception($ormE->getMessage(), 500);
+        }
+    }
+
+    /**
+     * @param $id
+     * @throws ##exceptionName##Exception
+     */
+    public function delete($id)
+    {
+        $this->entityManager->beginTransaction();
+        try {
+            $entity = $this->getRepository()->find($id);
+            $this->entityManager->remove($entity);
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (Doctrine\DBAL\DBALException $DBALe) {
+            $this->entityManager->rollback();
+            throw new ##exceptionName##Exception($DBALe->getMessage(), 500);
+        } catch (ORMException $ormE) {
+            $this->entityManager->rollback();
+            throw new ##exceptionName##Exception($ormE->getMessage(), 500);
+        }
+    }
+
+}

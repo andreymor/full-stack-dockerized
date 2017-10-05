@@ -1,0 +1,5 @@
+server:
+    type: rest
+    name_prefix: api_applicationbundle_server_api_v1_
+    resource: Api\ApplicationBundle\Controller\ServerController
+

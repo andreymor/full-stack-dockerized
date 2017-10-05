@@ -1,0 +1,117 @@
+<?php
+
+namespace ##bundleNamespace##\Controller;
+
+
+use App\CoreBundle\Controller\Controller;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
+use ##bundleNamespace##\Service\Exception\##exceptionName##Exception;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+class ##objectName##Controller extends Controller
+{
+
+    protected $service = '##serviceName##';
+
+
+    /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a single resource"
+     * )
+     * @SWG\Tag(name="parameters")
+     * @param $id
+     * @return mixed
+     */
+    public function getAction($id)
+    {
+        try {
+            return $this->resolve($this->getService()->get##objectName##($id));
+        } catch (##exceptionName##Exception $ex) {
+            return $this->reject($ex);
+        }
+    }
+
+    /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a collection of resources"
+     * )
+     * @SWG\Tag(name="parameters")
+     * @return mixed
+     */
+    public function cgetAction()
+    {
+        try {
+            $data = $this->getService()
+                ->get##objectNamePluralized##($this->get('request_stack')->getCurrentRequest()->query->get('filtro'));
+
+            return $this->resolve($data);
+        } catch (##exceptionName##Exception $ex) {
+            return $this->reject($ex);
+        }
+    }
+
+
+    /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a collection of resources"
+     * )
+     * @SWG\Tag(name="parameters")
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View
+     */
+    public function postAction(Request $request)
+    {
+        try {
+            $this->getService()->save($request);
+            return $this->resolve($this->get('translator')->trans('translate.nome'));
+        } catch (##exceptionName##Exception $ex) {
+            return $this->reject($ex);
+        }
+    }
+
+
+    /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a collection of resources"
+     * )
+     * @SWG\Tag(name="parameters")
+     * @param Request $request
+     * @param         $id
+     * @return \FOS\RestBundle\View\View
+     */
+    public function putAction(Request $request, $id)
+    {
+        try {
+            $this->getService()->save($request);
+            return $this->resolve($this->get('translator')->trans('translate.nome'));
+        } catch (##exceptionName##Exception $ex) {
+            return $this->reject($ex);
+        }
+    }
+
+    /**
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a collection of resources"
+     * )
+     * @SWG\Tag(name="parameters")
+     * @param $id
+     * @return \FOS\RestBundle\View\View
+     */
+    public function deleteAction($id)
+    {
+        try {
+            $this->getService()->delete($id);
+            return $this->resolve($this->get('translator')->trans('translate.nome'));
+        } catch (##exceptionName##Exception $ex) {
+            return $this->reject($ex);
+        }
+    }
+}

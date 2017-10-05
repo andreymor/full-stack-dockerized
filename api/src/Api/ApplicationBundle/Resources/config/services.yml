@@ -1,0 +1,10 @@
+services:
+    #api.applicationbundle.service.server:
+    #    class: Api\ApplicationBundle\Service\ServerService
+    #    arguments: ["@doctrine.orm.entity_manager", "@jms_serializer", "@validator"]
+
+    #api.applicationbundle.controller.server:
+    #    class: Api\ApplicationBundle\Controller\ServerController
+    #    arguments: ["@api.applicationbundle.service.server"]
+
+

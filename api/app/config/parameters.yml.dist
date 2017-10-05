@@ -1,0 +1,27 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_driver:        @default.database.driver@
+    database_host:          @default.database.host@
+    database_port:          @default.database.port@
+    database_service_name:  @default.database.service.name@
+    database_service_use:   @default.database.service.use@
+    database_user:          @default.database.user@
+    database_password:      @default.database.password@
+    database_charset:       @default.database.charset@
+
+
+    mailer_transport:               @mailer.transport@
+    mailer_host:                    @mailer.host@
+    mailer_user:                    @mailer.user@
+    mailer_password:                @mailer.password@
+
+    framework_strict:               @framework.strict@
+    framework_profile:              @framework.profile@
+
+    locale:                         @locale@
+    secret:                         @secret@
+    version:                        @version@
+
+    jms_serializer.camel_case_naming_strategy.class : @jms.serializer.naming.strategy@

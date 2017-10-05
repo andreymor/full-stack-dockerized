@@ -1,0 +1,8 @@
+<?php
+
+namespace ##bundleNamespace##\Service\Exception;
+
+class ##objectName##Exception extends \Exception
+{
+
+}

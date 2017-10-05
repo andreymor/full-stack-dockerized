@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build Api"
+         default="build:dev"
+         basedir="."
+         phingVersion="2.5.0"
+>
+
+    <target name="build:run" description="Build para ambientes">
+        <property file="build/common.properties"/>
+        <property file="build/${env.name}.properties"/>
+
+        <phingcall target="run:composer"></phingcall>
+
+        <phingcall target="run:configuration"></phingcall>
+
+        <phingcall target="run:cache:clear"></phingcall>
+
+        <phingcall target="run:assets:install"></phingcall>
+
+        <phingcall target="run:server"></phingcall>
+    </target>
+
+    <target name="build:dev" description="Build dev">
+        <echo msg="Building DEVELOPMENT"/>
+        <property name="env.name" value="dev" override="yes"/>
+        <property name="env" value="dev"/>
+        <phingcall target="build:run"/>
+    </target>
+
+    <target name="build:prod" description="Build prod">
+        <property name="env.name" value="prod" override="yes"/>
+        <property name="env" value="prod" override="yes"/>
+        <phingcall target="build:run"/>
+    </target>
+
+    <target name="run:configuration">
+        <copy file="app/config/parameters.yml.dist" tofile="app/config/parameters.yml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="@" endtoken="@">
+                    <!-- replace DB -->
+                    <token key="default.database.driver" value="${db.driver}"/>
+                    <token key="default.database.host" value="${db.host}"/>
+                    <token key="default.database.port" value="${db.port}"/>
+                    <token key="default.database.service.name" value="${db.service_name}"/>
+                    <token key="default.database.service.use" value="${db.service_use}"/>
+                    <token key="default.database.user" value="${db.user}"/>
+                    <token key="default.database.password" value="${db.password}"/>
+                    <token key="default.database.charset" value="${db.charset}"/>
+
+                    <!-- replace MAILER -->
+                    <token key="mailer.transport" value="${mailer.transport}"/>
+                    <token key="mailer.host" value="${mailer.hostname}"/>
+                    <token key="mailer.from" value="${mailer.from}"/>
+                    <token key="mailer.to" value="${mailer.to}"/>
+                    <token key="mailer.user" value="${mailer.user}"/>
+                    <token key="mailer.password" value="${mailer.password}"/>
+
+                    <!-- replace DEFAULT -->
+                    <token key="locale" value="${locale}"/>
+                    <token key="secret" value="${secret}"/>
+                    <token key="version" value="${version}"/>
+
+                    <token key="framework.strict" value="${framework.strict}"/>
+                    <token key="framework.profile" value="${framework.profile}"/>
+
+                    <token key="jms.serializer.naming.strategy" value="${jms.serializer.naming.strategy}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <target name="run:server" description="Executa o servidor built-in">
+        <if>
+            <equals arg1="dev" arg2="${env.name}"></equals>
+            <then>
+                <echo msg="Executa o servidor built-in"/>
+                <exec checkreturn="true" command="php bin/console server:run 0.0.0.0:3000" passthru="true" logoutput="true"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="run:composer" description="Executa composer">
+        <if>
+            <isset property="no-composer"></isset>
+            <else>
+                <if>
+                    <equals arg1="dev" arg2="${env.name}"></equals>
+                    <then>
+                        <if>
+                            <available file='autoload.php' filepath="vendor" property="check_vendor.autoload_exists"
+                                       type='file'/>
+                            <then>
+                                <echo msg="Updating composer data..."/>
+                                <exec checkreturn="true" command="composer update" passthru="true" logoutput="true"/>
+                            </then>
+                            <else>
+                                <echo msg="Installing composer data..."/>
+                                <exec checkreturn="true" command="composer install" passthru="true" logoutput="true"/>
+                            </else>
+                        </if>
+                    </then>
+                    <else>
+                        <if>
+                            <available file='autoload.php' property="check_vendor.autoload_exists" filepath="vendor"
+                                       type='file'/>
+                            <then>
+                                <echo msg="Updating composer data..."/>
+                                <exec checkreturn="true" command="composer update --prefer-dist -o --no-progress"
+                                      passthru="true" logoutput="true"/>
+                            </then>
+                            <else>
+                                <echo msg="Installing composer data..."/>
+                                <exec checkreturn="true" command="composer install --prefer-dist -o --no-progress"
+                                      passthru="true" logoutput="true"/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </else>
+        </if>
+    </target>
+
+    <target name="run:cache:clear">
+        <if>
+            <equals arg1="dev" arg2="${env.name}"></equals>
+            <then>
+                <echo msg="php bin/console cache:clear"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="cache:clear"/>
+                    <arg value="--no-warmup"/>
+                </exec>
+            </then>
+            <else>
+                <echo msg="php bin/console cache:clear --env=prod"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="cache:clear"/>
+                    <arg value="--env=prod"/>
+                    <arg value="--no-debug"/>
+                    <arg value="--no-warmup"/>
+                </exec>
+
+                <echo msg="cache do doctrine"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="doctrine:cache:clear-metadata"/>
+                    <arg value="--env=prod"/>
+                </exec>
+
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="doctrine:cache:clear-query"/>
+                    <arg value="--env=prod"/>
+                </exec>
+
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="doctrine:cache:clear-result"/>
+                    <arg value="--env=prod"/>
+                </exec>
+            </else>
+        </if>
+    </target>
+
+    <target name="run:assets:install">
+        <if>
+            <equals arg1="dev" arg2="${env.name}"></equals>
+            <then>
+                <echo msg="php bin/console assets:install --symlink"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="assets:install"/>
+                    <arg value="--symlink"/>
+                </exec>
+            </then>
+            <else>
+                <echo msg="php bin/console assets:install --env=prod"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="assets:install"/>
+                    <arg value="--env=prod"/>
+                </exec>
+            </else>
+        </if>
+    </target>
+
+    <target name="run:assetic:dump">
+        <if>
+            <equals arg1="dev" arg2="${env.name}"></equals>
+            <then>
+                <echo msg="php bin/console assetic:dump"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="assetic:dump"/>
+                </exec>
+            </then>
+            <else>
+                <echo msg="php bin/console assetic:dump --env=prod"/>
+                <exec executable="php" passthru="true" escape="false">
+                    <arg path="bin/console"/>
+                    <arg value="assetic:dump"/>
+                    <arg value="--env=prod"/>
+                </exec>
+            </else>
+        </if>
+    </target>
+</project>

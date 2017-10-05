@@ -1,0 +1,8 @@
+parameters:
+    jms_serializer.json_deserialization_visitor.class: App\SerializerBundle\Visitor\JsonDeserializationVisitor
+    jms_serializer.datetime_handler.class: App\SerializerBundle\Handler\DateHandler
+
+services:
+    jms_serializer.object_constructor:
+        alias: jms_serializer.doctrine_object_constructor
+        public: false

@@ -1,0 +1,156 @@
+<div class="row page-title">
+    <div class="col-md-12 title">
+        <div class="row text-left">
+            <div class="col-md-4">
+                <h1>Instant Delivery Dedicated Servers</h1>
+                <div class="subtitle">
+                    Available on demand for every business need
+                </div>
+                <div class="description-title">
+                    Get the raw power you need in an instant. They come pre-configured giving you the performance of
+                    dedicated server hosting with the flexibility of a virtual machine.
+                </div>
+            </div>
+            <div class="col-md-8 header-image">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row page-subtitle">
+    <div class="col-md-12">
+        <h3>Servers
+            <small>All featured servers</small>
+        </h3>
+    </div>
+</div>
+<div class="row content-data">
+    <div class="col-md-3 ">
+        <div class="sidebar-nav-fixed ">
+            <div class="row filter-title">
+                <div class="col-md-6">
+                    <h4>Filters</h4>
+                </div>
+                <div class="col-md-6 pull-right text-right">
+                    <h4><a (click)="clear()">Clear all</a></h4>
+                </div>
+            </div>
+            <div class="row box-filter">
+                <div class="col-md-12">
+                    <form [formGroup]="form">
+                        <div class="row">
+                            <div class="col-md-12" style="padding-bottom: 20px;">
+                                <label for="storage" class="control-label">Storage</label>
+                                <span class="text-left">{{showStorageValue()}}</span>
+                                <nouislider [config]="hddRangeConfig" [formControl]="form.get('formInput').get('hddId')"></nouislider>
+                            </div>
+                            <div class="col-md-12" formGroupName="formInput">
+                                <hr/>
+                                <div formArrayName="ramId">
+                                    <label class="control-label">Ram</label>
+                                    <div *ngFor="let ram of form.get('formInput').get('ramId').controls; let i = index" [formGroupName]="i"
+                                         class="checkboxes">
+                                        <label class="control-label label-form" for="ram_{{i}}">
+                                            <input type="checkbox" [value]="formData.rams[i].id"
+                                                   id="ram_{{i}}"
+                                                   formControlName="checked"
+                                            /> {{formData.rams[i].name}}{{formData.rams[i].sizeType}}
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr/>
+                                <label for="location" class="control-label">Location</label>
+                                <select id="location" class="form-control"
+                                        [formControl]="form.get('formInput').get('locationId')">
+                                    <option value=""></option>
+                                    <option *ngFor="let location of formData?.locations" [ngValue]="location.id">
+                                        {{location.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <hr/>
+                                <label for="type" class="control-label">Harddisk Type</label>
+                                <select id="type" class="form-control"
+                                        [formControl]="form.get('formInput').get('hddTypeId')">
+                                    <option value=""></option>
+                                    <option *ngFor="let hddType of formData?.hddType" [ngValue]="hddType.id">
+                                        {{hddType.name}}
+                                    </option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                    <th>
+
+                    </th>
+                    <th>
+                        Model
+                    </th>
+                    <th>
+                        RAM
+                    </th>
+                    <th>
+                        HDD
+                    </th>
+                    <th>
+                        Location
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <!--th>
+                        Actions
+                    </th-->
+                    </thead>
+                    <tbody *ngIf="listData?.length">
+                    <tr *ngFor="let item of listData; index as i">
+                        <td class="text-left">
+                        </td>
+                        <td class="text-left">
+                            <div>{{item.model}}</div>
+                            <div>{{item.modelType}}</div>
+                        </td>
+                        <td class="text-left">
+                            <div>{{item.ramFull}}</div>
+                            <div>{{item.ramType}}</div>
+                        </td>
+                        <td class="text-left">
+                            <div>{{item.hddFull}}</div>
+                            <div>{{item.hddType}}</div>
+                        </td>
+                        <td class="text-left">
+                            <div>{{item.locationName}}</div>
+                            <div>{{item.locationFull}}</div>
+                        </td>
+                        <td>{{item.price}}</td>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="!listData?.length">
+                    <tr>
+                        <td colspan="6" class="text-center">No results found</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--app-dialog-remove #dialogRemove [service]="serversService" (onSuccess)="submit()"></app-dialog-remove-->

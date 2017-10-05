@@ -1,0 +1,14 @@
+services:
+    core.handler.rest_json:
+        class: App\CoreBundle\Handler\RestJsonHandler
+        arguments: ["@jms_serializer"]
+    core.handler.rest_view:
+        parent: fos_rest.view_handler.default
+        calls:
+            - ['registerHandler', [ 'json', ['@core.handler.rest_json', 'createResponse'] ] ]
+    core.service.service:
+        class: App\CoreBundle\Service\Service
+        arguments: ["@doctrine.orm.entity_manager", "@jms_serializer"]
+
+    session.handler.null:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\NullSessionHandler

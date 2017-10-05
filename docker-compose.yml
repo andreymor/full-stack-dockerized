@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  frontend:
+    restart: always
+    build: ./frontend
+    container_name: app_frontend
+    command: npm start
+    ports:
+      - '4200:4200'
+    volumes:
+     - ./frontend:/usr/src/frontend
+     - /usr/src/frontend/node_modules
+
+  backend:
+    build: ./api
+    container_name: api_backend
+    command: php bin/phing-latest.phar
+    ports:
+      - '3000:3000'
+    links:
+      - postgres
+      - frontend
+    volumes:
+      - ./api:/usr/src/api
+
+  postgres:
+    build: ./db
+    ports:
+      - '5433:5432'
+    container_name: api_database
+    volumes:
+     - ./db/scripts/initial_data.sql:/docker-entrypoint-initdb.d/initial_data.sql

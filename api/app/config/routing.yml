@@ -1,0 +1,17 @@
+api.aplicacao:
+    resource: "@ApiApplicationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+api.aplicacao.rest:
+    type: rest
+    resource: "@ApiApplicationBundle/Resources/config/rest_routing.yml"
+    prefix:   /api/v1
+
+app.swagger_ui:
+    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+    prefix:   /api/v1/doc
+
+app.swagger:
+    path: /api/v1/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }

@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  frontend_unit:
+    restart: always
+    build: ./frontend
+    container_name: app_front_unit_test
+    command: npm test
+    ports:
+     - "9876:9876"
+    volumes:
+     - ./frontend:/usr/src/frontend
+     - /usr/src/frontend/node_modules
