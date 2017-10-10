@@ -11,7 +11,7 @@
 
         <phingcall target="run:configuration"></phingcall>
 
-        <!--phingcall target="run:composer"></phingcall-->
+        <phingcall target="run:composer"></phingcall>
 
         <phingcall target="run:cache:clear"></phingcall>
 

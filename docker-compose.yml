@@ -17,7 +17,7 @@ services:
     build: ./api
     image: backend:dev
     container_name: api_backend
-    command: php bin/phing-latest.phar -Dno-composer
+    command: php bin/phing-latest.phar
     networks:
       - frontend
       - backend
