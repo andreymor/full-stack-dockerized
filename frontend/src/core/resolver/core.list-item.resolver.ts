@@ -4,9 +4,6 @@ import {CoreItemResolver} from "./core.item.resolver";
 import {CoreResolver} from "./core.resolver";
 import {Query} from "../http/core.http.query.model";
 
-/**
- * Resolver que efetua a busca de uma lista de items do servidor via service.
- */
 export abstract class CoreListItemResolver<T extends CoreHttpService> extends CoreResolver<T> {
 
 

@@ -5,12 +5,6 @@ import {ActivatedRoute} from "@angular/router";
 import {CoreHttpService} from "../http/core.http.service";
 import {Query} from "../http/core.http.query.model";
 
-
-/**
- * componente de base para edição de um registro qualquer.
- * 
- * Para adicionar validação implemente a trait Validable 
- */
 export abstract class CoreFormComponent extends CoreItemComponent {
 
     formData: any;

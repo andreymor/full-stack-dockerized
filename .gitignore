@@ -1,7 +1,6 @@
 /api/app/config/parameters.yml
 /api/build\hmg.properties
 /api/phpunit.xml
-/api/var/*
 !/api/var/cache
 /api/var/cache/*
 !/apivar/cache/.gitkeep

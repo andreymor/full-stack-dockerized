@@ -4,11 +4,6 @@ import {CoreFormGroup} from "../form/core.form-group";
 import {CoreFormSearchComponent} from "./core.form-search.component";
 import {CoreHttpService} from "../http/core.http.service";
 
-/**
- * classe de base para exibição de uma lista de items resolvidos.
- *
- * os dados resolvidos ficam armazenados na váriavel results.
- */
 export abstract class CoreListItemComponent extends CoreFormSearchComponent {
     queryParams: any;
 

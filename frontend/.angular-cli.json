@@ -21,14 +21,11 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
-        "../node_modules/font-awesome/css/font-awesome.css",
         "assets/css/layout.css",
         "../node_modules/nouislider/distribute/nouislider.min.css"
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.min.js",
-        "main.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.js"
+        "main.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

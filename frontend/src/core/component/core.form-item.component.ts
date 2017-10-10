@@ -6,12 +6,6 @@ import {CoreHttpService} from "../http/core.http.service";
 import {Query} from "../http/core.http.query.model";
 import {CoreFormComponent} from "./core.form.component";
 
-
-/**
- * componente de base para edição de um registro qualquer.
- * 
- * Para adicionar validação implemente a trait Validable 
- */
 export abstract class CoreFormItemComponent extends CoreFormComponent {
     idItem: any;
 

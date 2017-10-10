@@ -2,10 +2,6 @@ import {Injectable} from '@angular/core';
 import {Router, Resolve, ActivatedRouteSnapshot} from '@angular/router';
 import {CoreHttpService} from "../http/core.http.service";
 
-/**
- * classe base para os resolvers de rota
- * este base resolver é um resolvedor generico, resolvendo qualquer coisa.
- */
 @Injectable()
 export abstract class CoreResolver<T extends CoreHttpService> implements Resolve<any> {
 

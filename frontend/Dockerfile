@@ -1,19 +1,13 @@
-FROM node:6.11.3-alpine as frontbuilder
+FROM node:6-alpine
 
 # Maintainer
 MAINTAINER Andrey Moretti <andreymor@gmail.com>
 
 ENV DIR=/usr/src/frontend
-ENV PHANTOMJS_ARCHIVE="phantomjs.tar.gz"
 
-RUN npm i -g @angular/cli@latest && npm cache clean
+RUN npm i -g @angular/cli@1.4.3 && npm cache clean
 
 COPY package.json ./
-
-RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main'>> /etc/apk/repositories \
-	&& apk --update add curl \
-	&& curl -Ls https://github.com/fgrehm/docker-phantomjs2/releases/download/v2.0.0-20150722/dockerized-phantomjs.tar.gz \
-       | tar xz -C /
 
 RUN npm i && \
     npm cache clean && \
@@ -24,4 +18,4 @@ WORKDIR $DIR
 
 COPY . $DIR
 
-CMD ["/bin/sh", "-l"]
+CMD ["/bin/sh"]

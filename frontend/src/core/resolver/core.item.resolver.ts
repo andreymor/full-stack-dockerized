@@ -4,9 +4,6 @@ import {CoreHttpService} from "../http/core.http.service";
 import {CoreResolver} from "./core.resolver";
 import {Query} from "../http/core.http.query.model";
 
-/**
- * classe que resolve um item para detalhamento
- */
 export abstract class CoreItemResolver<T extends CoreHttpService> extends CoreResolver<T> {
 
     /**

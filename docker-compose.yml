@@ -1,10 +1,12 @@
 version: '3.1'
 services:
   frontend:
-    restart: always
     build: ./frontend
+    image: frontend:dev
     container_name: app_frontend
     command: npm start
+    networks:
+      - frontend
     ports:
       - '4200:4200'
     volumes:
@@ -13,8 +15,12 @@ services:
 
   backend:
     build: ./api
+    image: backend:dev
     container_name: api_backend
-    command: php bin/phing-latest.phar
+    command: php bin/phing-latest.phar -Dno-composer
+    networks:
+      - frontend
+      - backend
     ports:
       - '3000:3000'
     links:
@@ -25,8 +31,15 @@ services:
 
   postgres:
     build: ./db
+    image: postgres:dev
+    networks:
+      - backend
     ports:
       - '5433:5432'
     container_name: api_database
     volumes:
      - ./db/scripts/initial_data.sql:/docker-entrypoint-initdb.d/initial_data.sql
+
+networks:
+  frontend:
+  backend:

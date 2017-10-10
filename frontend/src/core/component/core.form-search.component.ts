@@ -7,11 +7,6 @@ import {Query} from "../http/core.http.query.model";
 import {CoreFormComponent} from "./core.form.component";
 
 
-/**
- * componente de base para edição de um registro qualquer.
- *
- * Para adicionar validação implemente a trait Validable
- */
 export abstract class CoreFormSearchComponent extends CoreFormComponent {
 
     listData: Array<any>;
